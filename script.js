@@ -11,14 +11,14 @@
     const bubblesGroup  = document.getElementById('bubblesGroup');
 
     /* ============================
-       Constants
+       Constants  (glass SVG viewBox coords)
        ============================ */
-    const BOWL_TOP      = 30;   // y in glass SVG where bowl begins
-    const BOWL_BOTTOM   = 138;  // y in glass SVG where bowl ends
-    const BOWL_RANGE    = BOWL_BOTTOM - BOWL_TOP;   // 108
-    const MAX_ANGLE     = 45;   // degrees
+    const BOWL_TOP      = 58;   // y where bowl rim begins
+    const BOWL_BOTTOM   = 270;  // y where bowl meets stem
+    const BOWL_RANGE    = BOWL_BOTTOM - BOWL_TOP;  // 212
+    const MAX_ANGLE     = 45;
     const MAX_BUBBLES   = 28;
-    const SPAWN_MS      = 120;  // bubble spawn interval
+    const SPAWN_MS      = 120;
 
     /* ============================
        State
@@ -26,7 +26,7 @@
     let bubbles      = [];
     let bubbleTimer  = null;
     let filling      = false;
-    let fillPct      = 0;      // 0 → 1
+    let fillPct      = 0;
 
     /* ============================
        Helpers
@@ -36,8 +36,13 @@
 
     /** Return left/right x bounds of the glass bowl at a given y. */
     function bowlBounds(y) {
-        const t = (y - BOWL_TOP) / BOWL_RANGE;           // 0 at top, 1 at bottom
-        return { l: 25 + 14 * t, r: 75 - 14 * t };      // matches clip-path coords
+        const t = (y - BOWL_TOP) / BOWL_RANGE;  // 0 at top, 1 at bottom
+        const bulge = 4 * t * (1 - t);          // peaks at 1.0 when t=0.5
+        // Straight: l 353→343, r 452→377  +  outward curve
+        return {
+            l: 353 - 10 * t - 30 * bulge,
+            r: 452 - 75 * t + 25 * bulge
+        };
     }
 
     /* ============================
@@ -45,7 +50,6 @@
        ============================ */
     function updateParallax(scrollY) {
         const heroH = hero.offsetHeight;
-        // only apply effect while hero is in view
         if (scrollY > heroH) return;
 
         sets.forEach(set => {
@@ -58,33 +62,41 @@
        Bottle & Glass
        ============================ */
     function updateBottleGlass(scrollY) {
-        const heroH       = hero.offsetHeight;
-        const maxScroll   = document.documentElement.scrollHeight - window.innerHeight;
+        const heroH        = hero.offsetHeight;
+        const maxScroll    = document.documentElement.scrollHeight - window.innerHeight;
         const contentRange = maxScroll - heroH;
 
         if (contentRange <= 0) return;
 
         const contentScroll = clamp(scrollY - heroH, 0, contentRange);
-        const mid           = contentRange / 2;
 
-        if (contentScroll <= mid) {
+        // Bottle finishes rotating at 10% of content scroll
+        const bottleEnd = contentRange * 0.10;
+        // Glass fills from 10% to 40%
+        const fillStart = bottleEnd;
+        const fillEnd   = contentRange * 0.40;
+
+        if (contentScroll <= bottleEnd) {
             /* Phase 1 — tip the bottle 0 → 45° */
-            const tipPct = clamp(contentScroll / mid, 0, 1);
+            const tipPct = clamp(contentScroll / bottleEnd, 0, 1);
             bottleWrapper.style.transform = 'rotate(' + (tipPct * MAX_ANGLE) + 'deg)';
 
-            /* Glass stays empty */
-            liquidFill.setAttribute('y', BOWL_BOTTOM);
-            liquidFill.setAttribute('height', 0);
+            if (liquidFill) {
+                liquidFill.setAttribute('y', BOWL_BOTTOM);
+                liquidFill.setAttribute('height', 0);
+            }
             fillPct = 0;
             stopBubbles();
         } else {
             /* Phase 2 — bottle locked at 45°, glass fills */
             bottleWrapper.style.transform = 'rotate(' + MAX_ANGLE + 'deg)';
 
-            fillPct = clamp((contentScroll - mid) / mid, 0, 1);
+            fillPct = clamp((contentScroll - fillStart) / (fillEnd - fillStart), 0, 1);
             const h = fillPct * BOWL_RANGE;
-            liquidFill.setAttribute('y', BOWL_BOTTOM - h);
-            liquidFill.setAttribute('height', h);
+            if (liquidFill) {
+                liquidFill.setAttribute('y', BOWL_BOTTOM - h);
+                liquidFill.setAttribute('height', h);
+            }
 
             if (fillPct > 0 && !filling) startBubbles();
             if (fillPct <= 0) stopBubbles();
@@ -95,16 +107,15 @@
        Bubbles
        ============================ */
     function spawnBubble() {
-        if (bubbles.length >= MAX_BUBBLES || fillPct <= 0) return;
+        if (!bubblesGroup || bubbles.length >= MAX_BUBBLES || fillPct <= 0) return;
 
         const fillH     = fillPct * BOWL_RANGE;
         const liquidTop = BOWL_BOTTOM - fillH;
 
-        // spawn in the bottom third of current liquid
-        const spawnY = BOWL_BOTTOM - rand(0, Math.min(fillH * 0.3, 18));
+        const spawnY = BOWL_BOTTOM - rand(0, Math.min(fillH * 0.3, 80));
         const bounds = bowlBounds(spawnY);
-        const r      = rand(0.7, 2.4);
-        const cx     = rand(bounds.l + r + 1, bounds.r - r - 1);
+        const r      = rand(3, 8);
+        const cx     = rand(bounds.l + r + 2, bounds.r - r - 2);
 
         const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         el.setAttribute('cx', cx);
@@ -120,10 +131,10 @@
             baseCx:    cx,
             cy:        spawnY,
             r,
-            speed:     rand(0.12, 0.55),
+            speed:     rand(0.5, 2.2),
             wobPhase:  rand(0, Math.PI * 2),
             wobSpeed:  rand(2, 5),
-            wobAmp:    rand(0.3, 1.6)
+            wobAmp:    rand(1.5, 6)
         });
     }
 
@@ -138,21 +149,18 @@
             b.wobPhase += b.wobSpeed * 0.016;
             b.cx = b.baseCx + Math.sin(b.wobPhase) * b.wobAmp;
 
-            // keep inside bowl
             const bounds = bowlBounds(b.cy);
             b.cx = clamp(b.cx, bounds.l + b.r, bounds.r - b.r);
 
             b.el.setAttribute('cx', b.cx);
             b.el.setAttribute('cy', b.cy);
 
-            // fade near surface
             const dist = b.cy - liquidTop;
-            if (dist < 10) {
+            if (dist < 25) {
                 b.el.setAttribute('fill',
-                    'rgba(255,252,235,' + (Math.max(0, dist / 10) * 0.6).toFixed(2) + ')');
+                    'rgba(255,252,235,' + (Math.max(0, dist / 25) * 0.6).toFixed(2) + ')');
             }
 
-            // remove when above liquid
             if (b.cy <= liquidTop || b.cy < BOWL_TOP) {
                 b.el.remove();
                 bubbles.splice(i, 1);
@@ -203,7 +211,7 @@
        ============================ */
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    onScroll();                       // run once on load
-    requestAnimationFrame(animate);   // kick off bubble loop
+    onScroll();
+    requestAnimationFrame(animate);
 
 })();
