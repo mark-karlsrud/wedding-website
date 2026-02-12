@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallax Scrolling Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section with Parallax Layers */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .parallax-layer object {
+            position: absolute;
+            width: 100%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .main-layer-svg {
+            z-index: 1;
+        }
+
+        .detail-layer-svg {
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            color: white;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: bold;
+            text-shadow: 0.125rem 0.125rem 0.625rem rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        /* Main Content Section */
+        .main-content {
+            display: flex;
+            min-height: 300vh;
+            position: relative;
+            flex-direction: row;
+        }
+
+        /* Left Container - Sticky */
+        .left-container {
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 30%;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .bottle-container {
+            position: relative;
+            width: 28vw;
+            height: 35vh;
+            max-width: 18rem;
+            max-height: 28rem;
+            margin-bottom: 3vh;
+            padding: 0 10% 0 10%;
+        }
+
+        .bottle-svg {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.1s ease-out;
+        }
+
+        .glass-container {
+            position: relative;
+            width: 28vw;
+            height: 28vw;
+            max-width: 20rem;
+            max-height: 20rem;
+            overflow: hidden;
+        }
+
+        .glass-svg {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .liquid-overlay {
+            position: absolute;
+            transform: rotate(11deg);
+            transform-origin: bottom center;
+            max-height: 39%;
+            bottom: 59%;
+            left: 60%;
+            width: 17%;
+            height: 0;
+            background: linear-gradient(180deg,
+            rgba(255, 200, 100, 0.5) 0%,
+            rgba(255, 150, 50, 0.5) 100%);
+            transition: height 0.1s ease-out;
+            z-index: 1;
+            overflow: hidden;
+            border-radius: 50% 50% 50% 50% / 10% 10% 50% 50%;
+        }
+
+        .liquid-overlay::before {
+            content: '';
+            position: absolute;
+            top: -5%;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background: rgba(255, 200, 100, 0.3);
+            border-radius: 50%;
+        }
+
+        /* Bubbles */
+        .bubble {
+            position: absolute;
+            bottom: -10%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
+            border-radius: 50%;
+            animation: rise linear infinite;
+        }
+
+        @keyframes rise {
+            to {
+                bottom: 100%;
+                transform: translateX(1.25rem);
+            }
+        }
+
+        /* Right Container - Scrollable Content */
+        .right-container {
+            width: 70%;
+            padding: 4rem;
+            background: white;
+        }
+
+        .content-section {
+            margin-bottom: 4rem;
+        }
+
+        .content-section h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .content-section p {
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 48rem) {
+            .left-container {
+                width: 35%;
+                padding: 1rem;
+            }
+
+            .right-container {
+                width: 65%;
+                padding: 2rem;
+            }
+
+            .bottle-container {
+                width: 32vw;
+                height: 30vh;
+            }
+
+            .glass-container {
+                width: 32vw;
+                height: 32vw;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Hero Section with 5 Parallax Layers -->
+<section class="hero-section" id="hero">
+    <div class="parallax-layer" data-speed="0.1">
+        <!-- Main Layer 1 SVG (slowest) -->
+        <object data="clouds.svg" class="main-layer-svg" type="image/svg+xml"></object>
+        <!-- Detail Layer 1 SVG -->
+        <object data="clouds-detail.svg" class="detail-layer-svg" type="image/svg+xml"></object>
+    </div>
+
+    <div class="parallax-layer" data-speed="0.2" style="background: transparent;">
+        <!-- Main Layer 2 SVG -->
+        <object data="skyline1.svg" class="main-layer-svg" type="image/svg+xml"></object>
+        <!-- Detail Layer 2 SVG -->
+        <object data="skyline1-detail.svg" class="detail-layer-svg" type="image/svg+xml"></object>
+    </div>
+
+    <div class="parallax-layer" data-speed="0.3" style="background: transparent;">
+        <!-- Main Layer 3 SVG -->
+        <object data="skyline2.svg" class="main-layer-svg" type="image/svg+xml"></object>
+        <!-- Detail Layer 3 SVG -->
+        <object data="skyline2-detail.svg" class="detail-layer-svg" type="image/svg+xml"></object>
+    </div>
+
+    <div class="parallax-layer" data-speed="0.4" style="background: transparent;">
+        <!-- Main Layer 4 SVG -->
+        <object data="skyline3.svg" class="main-layer-svg" type="image/svg+xml"></object>
+        <!-- Detail Layer 4 SVG -->
+        <object data="skyline3-detail.svg" class="detail-layer-svg" type="image/svg+xml"></object>
+    </div>
+
+    <div class="parallax-layer" data-speed="1.0" data-sticky-bottom="true" style="background: transparent;">
+        <!-- Main Layer 5 SVG (sticks to bottom, no movement) -->
+        <object data="bridge.svg" class="main-layer-svg" type="image/svg+xml"></object>
+        <!-- Detail Layer 5 SVG -->
+        <object data="bridge-detail.svg" class="detail-layer-svg" type="image/svg+xml"></object>
+    </div>
+
+    <h1 class="hero-title">Welcome to Parallax</h1>
+</section>
+
+<!-- Main Content Section -->
+<div class="main-content">
+    <!-- Left Fixed Container -->
+    <div class="left-container">
+        <div class="bottle-container">
+            <object data="bottle.svg" id="bottle" class="bottle-svg" type="image/svg+xml"></object>
+
+            <!-- Placeholder for Bottle SVG -->
+            <!--            <svg class="bottle-svg" id="bottle" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">-->
+            <!--                <rect x="35" y="10" width="30" height="15" fill="#8b4513" rx="2"/>-->
+            <!--                <rect x="40" y="25" width="20" height="10" fill="#a0522d"/>-->
+            <!--                <path d="M30,35 L30,120 Q30,140 50,140 Q70,140 70,120 L70,35 Z" fill="#d2691e" stroke="#8b4513" stroke-width="2"/>-->
+            <!--                <ellipse cx="50" cy="35" rx="20" ry="5" fill="#a0522d"/>-->
+            <!--            </svg>-->
+        </div>
+
+        <div class="glass-container">
+            <!-- Placeholder for Glass SVG with round bottom -->
+            <object data="glass.svg" class="glass-svg" type="image/svg+xml"></object>
+            <!--            <svg class="glass-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">-->
+            <!--                <path d="M20,20 L25,75 Q25,90 50,90 Q75,90 75,75 L80,20 Z"-->
+            <!--                      fill="none"-->
+            <!--                      stroke="#87ceeb"-->
+            <!--                      stroke-width="3"-->
+            <!--                      opacity="0.7"/>-->
+            <!--                <ellipse cx="50" cy="20" rx="30" ry="5" fill="none" stroke="#87ceeb" stroke-width="3" opacity="0.7"/>-->
+            <!--            </svg>-->
+
+            <!-- Liquid Overlay -->
+            <div class="liquid-overlay" id="liquid"></div>
+        </div>
+    </div>
+
+    <!-- Right Scrollable Container -->
+    <div class="right-container">
+        <div class="content-section">
+            <h2>The Art of Parallax</h2>
+            <p>Parallax scrolling creates a sense of depth by moving background images at different speeds than foreground images. This technique has been used in video games since the 1980s and has become increasingly popular in web design.</p>
+            <p>The effect creates an illusion of depth in a 2D scene, making the experience more immersive and engaging for users. As you scroll down this page, notice how different elements move at different rates, creating a dynamic and visually interesting experience.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Creating Depth Through Motion</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Interactive Elements</h2>
+            <p>Watch as the bottle on the left rotates as you scroll, simulating a pouring motion. The glass below fills with liquid, complete with animated bubbles that rise through the liquid.</p>
+            <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Modern Web Design</h2>
+            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+            <p>Similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
+            <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>Scroll Further</h2>
+            <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae.</p>
+            <p>Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>
+        </div>
+
+        <div class="content-section">
+            <h2>The Final Pour</h2>
+            <p>Continue scrolling to watch the bottle rotate to its full 45-degree angle and the glass completely fill with bubbly liquid. This demonstrates how scroll-based animations can create engaging storytelling experiences.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hero Parallax Effect
+    const hero = document.getElementById('hero');
+    const parallaxLayers = document.querySelectorAll('.parallax-layer');
+
+    // Initialize positions on page load
+    function initializeParallax() {
+        const heroHeight = hero.offsetHeight;
+        const totalLayers = parallaxLayers.length;
+
+        // Each image is 80% of hero height (from CSS)
+        const imageHeightPercent = 0.8;
+
+        parallaxLayers.forEach((layer, index) => {
+            // Check if this layer should stick to bottom
+            const isStickyBottom = layer.dataset.stickyBottom === 'true';
+
+            if (isStickyBottom) {
+                // Position at bottom: center at 60% so bottom is at 100%
+                const bottomLayerCenter = 1 - (imageHeightPercent / 2); // 0.6
+                const initialOffset = (bottomLayerCenter - 0.5) * heroHeight;
+                layer.style.transform = `translateY(${initialOffset}px)`;
+            } else {
+                // Distribute remaining layers evenly
+                const topLayerCenter = imageHeightPercent / 2; // 0.4 (40%)
+                const bottomLayerCenter = 1 - (imageHeightPercent / 2); // 0.6 (60%)
+
+                // Interpolate between top and bottom positions
+                const centerPercent = topLayerCenter + (index / (totalLayers - 1)) * (bottomLayerCenter - topLayerCenter);
+
+                // Convert to offset from center (0.5)
+                const initialOffset = (centerPercent - 0.5) * heroHeight;
+                layer.style.transform = `translateY(${initialOffset}px)`;
+            }
+        });
+    }
+
+    // Call on page load
+    initializeParallax();
+
+    // Also reinitialize on window resize
+    window.addEventListener('resize', initializeParallax);
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const heroHeight = hero.offsetHeight;
+
+        // Only apply parallax in hero section
+        if (scrolled <= heroHeight) {
+            const scrollProgress = scrolled / heroHeight;
+
+            parallaxLayers.forEach((layer, index) => {
+                const totalLayers = parallaxLayers.length;
+
+                // Check if this layer should stick to bottom
+                const isStickyBottom = layer.dataset.stickyBottom === 'true';
+
+                if (isStickyBottom) {
+                    // Keep stuck to bottom - no movement
+                    const imageHeightPercent = 0.8;
+                    const bottomLayerCenter = 1 - (imageHeightPercent / 2); // 0.6
+                    const yPos = (bottomLayerCenter - 0.5) * heroHeight;
+                    layer.style.transform = `translateY(${yPos}px)`;
+                } else {
+                    // Each image is 80% of hero height (from CSS)
+                    const imageHeightPercent = 0.8;
+
+                    // Distribute layers so bottom of last image is flush with bottom of hero
+                    const topLayerCenter = imageHeightPercent / 2; // 0.4 (40%)
+                    const bottomLayerCenter = 1 - (imageHeightPercent / 2); // 0.6 (60%)
+
+                    // Interpolate between top and bottom positions
+                    const centerPercent = topLayerCenter + (index / (totalLayers - 1)) * (bottomLayerCenter - topLayerCenter);
+
+                    // Convert to offset from center (0.5)
+                    const initialOffset = (centerPercent - 0.5) * heroHeight;
+
+                    // As we scroll, layers converge toward center
+                    // convergenceAmount goes from 0 (spread out) to 0.85 (85% convergence for more movement)
+                    const convergenceAmount = scrollProgress * 0.85;
+
+                    // Final position: interpolate from spread to converged
+                    const yPos = initialOffset * (1 - convergenceAmount);
+
+                    layer.style.transform = `translateY(${yPos}px)`;
+                }
+            });
+        }
+
+        // Bottle rotation and liquid fill (starts after hero section)
+        const mainContent = document.querySelector('.main-content');
+        const mainContentTop = heroHeight;
+        const mainContentHeight = mainContent.offsetHeight;
+
+        if (scrolled > mainContentTop) {
+            const scrollInContent = scrolled - mainContentTop;
+            const totalScrollRange = mainContentHeight * 0.8;
+            const scrollProgress = Math.min(scrollInContent / totalScrollRange, 1);
+
+            // Bottle tips quickly in first 20% of scroll
+            const bottlePhase = Math.min(scrollProgress / 0.2, 1);
+            const rotation = bottlePhase * 45;
+            const bottle = document.getElementById('bottle');
+            bottle.style.transform = `rotate(${rotation}deg)`;
+
+            // Glass fills after bottle is fully tipped (20% - 100% of scroll range)
+            let liquidHeight = 0;
+            if (scrollProgress > 0.2) {
+                const liquidPhase = (scrollProgress - 0.2) / 0.8;
+                liquidHeight = liquidPhase * 100;
+            }
+
+            const liquid = document.getElementById('liquid');
+            liquid.style.height = `${liquidHeight}%`;
+
+            // Add bubbles dynamically based on liquid level
+            if (liquidHeight > 10 && liquidHeight < 100) {
+                addBubbles(liquid, liquidHeight);
+            }
+        }
+    });
+
+    // Bubble generation
+    let bubbleInterval;
+    let lastBubbleTime = 0;
+
+    function addBubbles(container, liquidHeight) {
+        const now = Date.now();
+
+        // Only add bubbles every 200ms
+        if (now - lastBubbleTime < 200) return;
+        lastBubbleTime = now;
+
+        // Limit number of bubbles
+        const existingBubbles = container.querySelectorAll('.bubble');
+        if (existingBubbles.length > 15) {
+            existingBubbles[0].remove();
+        }
+
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+
+        // Use percentage-based sizing
+        const size = Math.random() * 3 + 1; // 1-4% of container
+        bubble.style.width = `${size}%`;
+        bubble.style.height = `${size}%`;
+        bubble.style.left = `${Math.random() * 80 + 10}%`;
+        bubble.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        bubble.style.animationDelay = `${Math.random() * 0.5}s`;
+
+        container.appendChild(bubble);
+
+        // Remove bubble after animation
+        setTimeout(() => {
+            bubble.remove();
+        }, 5000);
+    }
+</script>
+</body>
+</html>
