@@ -1,0 +1,197 @@
+/* =========================================
+   Custom Properties
+   ========================================= */
+:root {
+    --bg:            #FFF9F3;
+    --sidebar-bg:    #FAF3EB;
+    --sidebar-width: 200px;
+    --gold:          #C9B037;
+    --champagne:     #E8C547;
+    --text:          #2C1810;
+}
+
+/* =========================================
+   Reset & Base
+   ========================================= */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Georgia, 'Times New Roman', serif;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   HERO  —  5 Parallax Sets
+   ========================================= */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(170deg, #FFF5E9 0%, #FDE8D0 50%, #F9DAB8 100%);
+}
+
+.hero-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Each set is a full-viewport layer stacked on top of the others */
+.parallax-set {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* SVG placeholder slots */
+.svg-slot {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed rgba(180, 140, 90, 0.35);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(2px);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.svg-slot::after {
+    content: attr(data-label);
+    font-size: clamp(0.55rem, 1.2vw, 0.85rem);
+    color: rgba(160, 120, 70, 0.6);
+    font-family: sans-serif;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+}
+
+/* Front slot overlays the back slot */
+.svg-slot.front {
+    border-color: rgba(180, 140, 90, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* =========================================
+   CONTENT WRAPPER  —  Sidebar + Main
+   ========================================= */
+.content-wrapper {
+    display: flex;
+    min-height: 300vh;          /* enough height for scroll effects */
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: var(--sidebar-bg);
+    border-right: 1px solid rgba(200, 180, 150, 0.3);
+}
+
+.sidebar-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px 12px;
+    overflow: visible;
+}
+
+/* ---------- Bottle ---------- */
+.bottle-wrapper {
+    width: 60%;
+    max-width: 90px;
+    transform-origin: center bottom;
+    transition: transform 0.06s linear;
+}
+
+.bottle-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ---------- Glass ---------- */
+.glass-wrapper {
+    width: 68%;
+    max-width: 100px;
+}
+
+.glass-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ---------- Main Content ---------- */
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 48px 40px;
+}
+
+.content-placeholder {
+    min-height: 280vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 60px;
+}
+
+.content-placeholder p {
+    font-size: 1.15rem;
+    color: rgba(44, 24, 16, 0.35);
+    font-style: italic;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 900px) {
+    :root { --sidebar-width: 140px; }
+
+    .main-content { padding: 32px 24px; }
+}
+
+@media (max-width: 600px) {
+    :root { --sidebar-width: 90px; }
+
+
+    .bottle-wrapper { width: 70%; max-width: 60px; }
+    .glass-wrapper  { width: 78%; max-width: 70px; }
+
+    .main-content { padding: 24px 16px; }
+}
+
+@media (max-width: 400px) {
+    :root { --sidebar-width: 66px; }
+
+    .sidebar-sticky { padding: 16px 6px; gap: 8px; }
+    .bottle-wrapper { width: 80%; max-width: 50px; }
+    .glass-wrapper  { width: 88%; max-width: 56px; }
+}
