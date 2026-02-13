@@ -214,4 +214,42 @@
     onScroll();
     requestAnimationFrame(animate);
 
+    /* ============================
+       RSVP Form
+       ============================ */
+    var rsvpForm   = document.getElementById('rsvpForm');
+    var rsvpStatus = document.getElementById('rsvpStatus');
+
+    if (rsvpForm) {
+        rsvpForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var btn = rsvpForm.querySelector('.rsvp-btn');
+            btn.disabled = true;
+            btn.textContent = 'Sending\u2026';
+            rsvpStatus.textContent = '';
+
+            var data = new FormData(rsvpForm);
+
+            fetch('https://script.google.com/macros/s/AKfycbz5iJ3Wr-NsH4D5z9cAcg27AMX-H3_Fbg-OgIV93fEbHw5CaKv9W-6ZET_9FaEiWP8LeA/exec', {
+                method: 'POST',
+                body: data
+            })
+            .then(function (res) { return res.json(); })
+            .then(function () {
+                rsvpStatus.style.color = '#2e7d32';
+                rsvpStatus.textContent = 'Thank you! Your RSVP has been received.';
+                rsvpForm.reset();
+            })
+            .catch(function () {
+                rsvpStatus.style.color = '#c62828';
+                rsvpStatus.textContent = 'Something went wrong. Please try again.';
+            })
+            .finally(function () {
+                btn.disabled = false;
+                btn.textContent = 'Send RSVP';
+            });
+        });
+    }
+
 })();

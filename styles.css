@@ -166,6 +166,94 @@ body {
 }
 
 /* =========================================
+   RSVP Form
+   ========================================= */
+.rsvp-section {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 48px 0 80px;
+}
+
+.rsvp-title {
+    font-size: 2rem;
+    font-weight: normal;
+    text-align: center;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 32px;
+}
+
+.rsvp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rsvp-form label {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(44, 24, 16, 0.6);
+    margin-top: 8px;
+}
+
+.rsvp-form input,
+.rsvp-form select,
+.rsvp-form textarea {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 10px 12px;
+    border: 1px solid rgba(200, 180, 150, 0.5);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.rsvp-form input:focus,
+.rsvp-form select:focus,
+.rsvp-form textarea:focus {
+    border-color: var(--gold);
+}
+
+.rsvp-form textarea {
+    resize: vertical;
+}
+
+.rsvp-btn {
+    margin-top: 16px;
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.rsvp-btn:hover {
+    opacity: 0.85;
+}
+
+.rsvp-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.rsvp-status {
+    text-align: center;
+    margin-top: 12px;
+    font-style: italic;
+    min-height: 1.4em;
+}
+
+/* =========================================
    RESPONSIVE
    ========================================= */
 @media (max-width: 900px) {

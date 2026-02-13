@@ -101,6 +101,28 @@
             <div class="content-placeholder">
                 <p>Content coming soon&hellip;</p>
             </div>
+
+            <!-- RSVP Form -->
+            <section class="rsvp-section" id="rsvp">
+                <h2 class="rsvp-title">RSVP</h2>
+                <form class="rsvp-form" id="rsvpForm">
+                    <label for="rsvpName">Name</label>
+                    <input type="text" id="rsvpName" name="Name" required>
+
+                    <label for="rsvpAttending">Attending?</label>
+                    <select id="rsvpAttending" name="Attending" required>
+                        <option value="" disabled selected>Select&hellip;</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+
+                    <label for="rsvpNotes">Notes</label>
+                    <textarea id="rsvpNotes" name="Notes" rows="4"></textarea>
+
+                    <button type="submit" class="rsvp-btn">Send RSVP</button>
+                    <p class="rsvp-status" id="rsvpStatus"></p>
+                </form>
+            </section>
         </main>
 
     </div>
