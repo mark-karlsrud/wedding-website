@@ -53,8 +53,9 @@
         if (scrollY > heroH) return;
 
         sets.forEach(set => {
-            const speed = parseFloat(set.dataset.speed);
-            set.style.transform = 'translateY(' + -(scrollY * speed) + 'px)';
+            const speed  = parseFloat(set.dataset.speed);
+            const offset = parseFloat(set.dataset.offset) || 0;
+            set.style.transform = 'translateY(' + (offset - scrollY * speed) + 'px)';
         });
     }
 
@@ -213,6 +214,65 @@
     window.addEventListener('resize', onScroll);
     onScroll();
     requestAnimationFrame(animate);
+
+    /* ============================
+       Photo Carousel
+       ============================ */
+    var track     = document.getElementById('carouselTrack');
+    var prevBtn   = document.getElementById('carouselPrev');
+    var nextBtn   = document.getElementById('carouselNext');
+    var dotsWrap  = document.getElementById('carouselDots');
+
+    if (track) {
+        var slides   = track.querySelectorAll('img');
+        var total    = slides.length;
+        var current  = 0;
+
+        // Build dots
+        for (var i = 0; i < total; i++) {
+            var dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', 'Go to photo ' + (i + 1));
+            dot.dataset.index = i;
+            dotsWrap.appendChild(dot);
+        }
+        var dots = dotsWrap.querySelectorAll('.carousel-dot');
+
+        // Auto-scroll
+        var autoTimer = setInterval(function () { goTo(current + 1); }, 5000);
+
+        function resetAuto() {
+            clearInterval(autoTimer);
+            autoTimer = setInterval(function () { goTo(current + 1); }, 5000);
+        }
+
+        function goTo(idx) {
+            current = (idx + total) % total;
+            track.style.transform = 'translateX(' + -(current * 100) + '%)';
+            dots.forEach(function (d, j) {
+                d.classList.toggle('active', j === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', function () { goTo(current - 1); resetAuto(); });
+        nextBtn.addEventListener('click', function () { goTo(current + 1); resetAuto(); });
+        dotsWrap.addEventListener('click', function (e) {
+            if (e.target.classList.contains('carousel-dot')) {
+                goTo(parseInt(e.target.dataset.index, 10));
+                resetAuto();
+            }
+        });
+
+        // Swipe support
+        var startX = 0;
+        track.addEventListener('touchstart', function (e) {
+            startX = e.touches[0].clientX;
+        }, { passive: true });
+        track.addEventListener('touchend', function (e) {
+            var diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 40) { goTo(current + (diff > 0 ? 1 : -1)); resetAuto(); }
+        });
+    }
 
     /* ============================
        RSVP Form
