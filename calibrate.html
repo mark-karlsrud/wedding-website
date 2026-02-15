@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head><title>Bowl Calibration</title>
+<style>
+body { margin: 20px; font-family: sans-serif; background: #FAF3EB; }
+.container { position: relative; width: 200px; display: inline-block; }
+.container img { width: 100%; display: block; }
+.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+#info { margin-top: 20px; font-size: 14px; white-space: pre; }
+</style>
+</head>
+<body>
+<p>Move mouse over the glass. Coordinates are in the glass SVG viewBox system (0-477 x, 0-681 y).</p>
+<div class="container" id="container">
+    <img src="images/glass.svg" alt="">
+    <svg class="overlay" viewBox="0 0 476.85587 681.4129" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Estimated bowl clip shown in red -->
+        <path d="M45,95 Q20,200 90,400 L387,400 Q457,200 432,95 Z" fill="rgba(255,0,0,0.25)" stroke="red" stroke-width="2"/>
+        <!-- Crosshair -->
+        <line id="hline" x1="0" y1="0" x2="477" y2="0" stroke="blue" stroke-width="1"/>
+        <line id="vline" x1="0" y1="0" x2="0" y2="681" stroke="blue" stroke-width="1"/>
+        <circle id="dot" cx="0" cy="0" r="4" fill="blue"/>
+    </svg>
+</div>
+<div id="info">Hover over glass...</div>
+<script>
+const container = document.getElementById('container');
+const hline = document.getElementById('hline');
+const vline = document.getElementById('vline');
+const dot = document.getElementById('dot');
+const info = document.getElementById('info');
+container.addEventListener('mousemove', function(e) {
+    const rect = container.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width * 476.85587;
+    const py = (e.clientY - rect.top) / rect.height * 681.4129;
+    hline.setAttribute('y1', py); hline.setAttribute('y2', py);
+    vline.setAttribute('x1', px); vline.setAttribute('x2', px);
+    dot.setAttribute('cx', px); dot.setAttribute('cy', py);
+    info.textContent = 'x: ' + px.toFixed(1) + '  y: ' + py.toFixed(1);
+});
+</script>
+</body>
+</html>
