@@ -1,143 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Wedding</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lower Manhattan 3D Map</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
-
-    <!-- ===== HERO — 5 Parallax Sets ===== -->
-    <section class="hero" id="hero">
-        <div class="hero-inner">
-            <h1 class="hero-title">Sophia and Mark are getting married!</h1>
-
-            <div class="parallax-set" data-speed="0.65" data-offset="-250">
-                <div class="svg-slot back">
-                    <img src="images/clouds.svg" alt="">
-                </div>
-                <div class="svg-slot front">
-                    <img src="images/clouds-detail.svg" alt="">
-                </div>
-            </div>
-
-            <div class="parallax-set" data-speed="0.50" data-offset="-170">
-                <div class="svg-slot back">
-                    <img src="images/skyline1.svg" alt="">
-                </div>
-                <div class="svg-slot front">
-                    <img src="images/skyline1-detail.svg" alt="">
-                </div>
-            </div>
-
-            <div class="parallax-set" data-speed="0.35" data-offset="-90">
-                <div class="svg-slot back">
-                    <img src="images/skyline2.svg" alt="">
-                </div>
-                <div class="svg-slot front">
-                    <img src="images/skyline2-detail.svg" alt="">
-                </div>
-            </div>
-
-            <div class="parallax-set" data-speed="0.20" data-offset="-35">
-                <div class="svg-slot back">
-                    <img src="images/skyline3.svg" alt="">
-                </div>
-                <div class="svg-slot front">
-                    <img src="images/skyline3-detail.svg" alt="">
-                </div>
-            </div>
-
-            <div class="parallax-set" data-speed="0.05" data-offset="0">
-                <div class="svg-slot back">
-                    <img src="images/bridge.svg" alt="">
-                </div>
-                <div class="svg-slot front">
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ===== MAIN LAYOUT ===== -->
-    <div class="content-wrapper">
-
-        <!-- Sticky Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-sticky">
-
-                <!-- Champagne Bottle -->
-                <div class="bottle-wrapper" id="bottleWrapper">
-                    <img class="bottle-svg" src="images/bottle.svg" alt="">
-                </div>
-
-                <!-- Champagne Glass -->
-                <div class="glass-wrapper">
-                    <img class="glass-svg" src="images/glass.svg" alt="">
-                    <svg class="glass-fill-overlay" viewBox="0 0 476.85587 681.4129" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <clipPath id="bowl-clip">
-                                <path d="M352.9,58 C320,90 315,210 343.3,260.7 L376.7,270.2 C450,210 455,90 452,72.3 Z"/>
-                            </clipPath>
-                            <linearGradient id="champagne-grad" x1="0" y1="1" x2="0" y2="0">
-                                <stop offset="0%"   stop-color="#B8860B"/>
-                                <stop offset="40%"  stop-color="#D4A843"/>
-                                <stop offset="100%" stop-color="#E8D5A3"/>
-                            </linearGradient>
-                        </defs>
-                        <g clip-path="url(#bowl-clip)">
-                            <rect id="liquidFill" x="0" y="270" width="477" height="0"
-                                  fill="url(#champagne-grad)" opacity="0.88"/>
-                            <g id="bubblesGroup"></g>
-                        </g>
-                    </svg>
-                </div>
-
-            </div>
-        </aside>
-
-        <!-- Main Content Panel -->
-        <main class="main-content" id="mainContent">
-            <!-- Photo Carousel -->
-            <section class="carousel" id="carousel">
-                <div class="carousel-track" id="carouselTrack">
-                    <img src="pics/1.svg" alt="Photo 1">
-                    <img src="pics/2.svg" alt="Photo 2">
-                    <img src="pics/3.svg" alt="Photo 3">
-                    <img src="pics/4.svg" alt="Photo 4">
-                    <img src="pics/5.svg" alt="Photo 5">
-                </div>
-                <button class="carousel-btn carousel-btn--prev" id="carouselPrev" aria-label="Previous">&lsaquo;</button>
-                <button class="carousel-btn carousel-btn--next" id="carouselNext" aria-label="Next">&rsaquo;</button>
-                <div class="carousel-dots" id="carouselDots"></div>
-            </section>
-
-            <!-- RSVP Form -->
-            <section class="rsvp-section" id="rsvp">
-                <h2 class="rsvp-title">RSVP</h2>
-                <form class="rsvp-form" id="rsvpForm">
-                    <label for="rsvpName">Name</label>
-                    <input type="text" id="rsvpName" name="Name" required>
-
-                    <label for="rsvpAttending">Attending?</label>
-                    <select id="rsvpAttending" name="Attending" required>
-                        <option value="" disabled selected>Select&hellip;</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-
-                    <label for="rsvpNotes">Notes</label>
-                    <textarea id="rsvpNotes" name="Notes" rows="4"></textarea>
-
-                    <button type="submit" class="rsvp-btn">Send RSVP</button>
-                    <p class="rsvp-status" id="rsvpStatus"></p>
-                </form>
-            </section>
-        </main>
-
-    </div>
-
-    <script src="script.js"></script>
+  <canvas id="canvas"></canvas>
+  <div id="tooltip"></div>
+  <div id="loading">Loading buildings&hellip;</div>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
