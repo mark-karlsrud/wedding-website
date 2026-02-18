@@ -28,7 +28,7 @@ function seededRand(n) {
 /* ── CSV parsing ─────────────────────────────────────────── */
 async function loadCSV(url) {
   const text = await (await fetch(url)).text();
-  const lines = text.trim().split('\n');
+  const lines = text.trim().split(/\r?\n/);
   const header = parseCSVLine(lines[0]);
   const rows = [];
   for (let i = 1; i < lines.length; i++) {
@@ -297,8 +297,9 @@ async function main() {
     const heightRoof = parseFloat((r['Height Roof'] || '').replace(/,/g, ''));
     if (!heightRoof || heightRoof <= 0) continue;
 
-    // Only include buildings inside Manhattan shoreline
-    if (!pointInPolygon(geom.centroidLat, geom.centroidLng, SHORELINE_LATLNG)) continue;
+    // Only include buildings inside Manhattan bounding box
+    if (geom.centroidLat < 40.700 || geom.centroidLat > 40.883 ||
+        geom.centroidLng < -74.020 || geom.centroidLng > -73.907) continue;
 
     const bin = parseInt(r.BIN) || 0;
     const name = r.NAME || VENUES[bin] || '';
@@ -322,8 +323,8 @@ async function main() {
     count++;
   }
 
-  const cLat = sumLat / count;
-  const cLng = sumLng / count;
+  const cLat = count > 0 ? sumLat / count : 40.71;
+  const cLng = count > 0 ? sumLng / count : -74.01;
 
   // Convert to scene coordinates
   for (const b of buildings) {
@@ -766,7 +767,7 @@ async function main() {
     const sx = (lng - cLng) * FT_PER_DEG_LNG * SCALE;
     const sz = -(lat - cLat) * FT_PER_DEG_LAT * SCALE;
     return new THREE.Vector2(sx, -sz);
-  });
+  }).filter(v => isFinite(v.x) && isFinite(v.y));
   const shoreShape = new THREE.Shape(shorePoints);
   const shoreGeo = new THREE.ShapeGeometry(shoreShape);
   const shoreMat = new THREE.MeshStandardMaterial({ color: 0x4a4a4a, roughness: 0.9, side: THREE.DoubleSide });
