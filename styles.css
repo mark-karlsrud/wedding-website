@@ -714,6 +714,178 @@ h1, h2, h3, h4 {
 }
 
 /* ============================================================
+   RSVP
+   ============================================================ */
+.rsvp-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.rsvp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.rsvp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.rsvp-label {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: 0.03em;
+}
+
+.rsvp-optional {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 300;
+  letter-spacing: 0;
+}
+
+.rsvp-input {
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--cream-mid);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  -webkit-appearance: none;
+}
+.rsvp-input::placeholder { color: var(--muted); opacity: 0.6; }
+.rsvp-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(191, 158, 108, 0.12);
+}
+
+.rsvp-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.7;
+}
+
+/* Yes / No toggle */
+.rsvp-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--cream-mid);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--white);
+}
+
+.rsvp-toggle-opt {
+  display: flex;
+  cursor: pointer;
+}
+
+.rsvp-toggle-opt input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
+.rsvp-toggle-opt span {
+  flex: 1;
+  text-align: center;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: var(--white);
+  border-right: 1px solid var(--cream-mid);
+  transition: background var(--transition), color var(--transition);
+  user-select: none;
+}
+
+.rsvp-toggle-opt:last-child span { border-right: none; }
+
+.rsvp-toggle-opt:hover span { color: var(--charcoal); }
+
+.rsvp-toggle-opt input:checked + span {
+  background: var(--charcoal);
+  color: var(--cream);
+}
+
+/* Error message */
+.rsvp-field-error {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: #8B3A3A;
+  letter-spacing: 0.01em;
+  margin-top: -0.5rem;
+}
+
+/* Submit button */
+.rsvp-submit {
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--charcoal);
+  color: var(--cream);
+  border: 1px solid var(--charcoal);
+  padding: 0.9rem 2.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.rsvp-submit:hover:not(:disabled) {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.rsvp-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Success state */
+.rsvp-success {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.rsvp-success-doodle {
+  width: 80px;
+  color: var(--gold);
+  opacity: 0.7;
+  margin: 0 auto 1.5rem;
+}
+
+.rsvp-success-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--charcoal);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.03em;
+}
+
+.rsvp-success-text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* ============================================================
    FOOTER
    ============================================================ */
 .footer {

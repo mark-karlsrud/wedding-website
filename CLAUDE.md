@@ -23,7 +23,7 @@ Single-page site with smooth-scroll navigation. Three files:
 
 - **`index.html`** — All content and inline SVG illustrations. Each major section has an HTML comment header (`<!-- NAVIGATION -->`, `<!-- HERO -->`, etc.)
 - **`styles.css`** — All styles, organized with section comments. CSS custom properties at the top under `:root` define the full design system (colors, fonts, spacing).
-- **`script.js`** — Three self-contained IIFEs: nav scroll/mobile toggle, carousel, and scroll-reveal animations.
+- **`script.js`** — Four self-contained IIFEs: nav scroll/mobile toggle, carousel, RSVP form submission, and scroll-reveal animations.
 
 ## Design System
 
@@ -51,3 +51,5 @@ Defined as CSS custom properties in `styles.css`:
 **Update honeymoon fund links:** Replace `href="#"` on the Venmo/PayPal `.fund-btn` anchors. For Zelle, update the `<small>` tag text inside `.fund-zelle`.
 
 **Venue addresses:** Maxwell Tribeca's address is currently `Tribeca, New York, NY` — update once confirmed.
+
+**RSVP form:** Posts to a Google Apps Script endpoint via `fetch` with `mode: 'no-cors'`. The Apps Script URL is hardcoded in `script.js` (`initRsvp` IIFE). Fields sent are `name`, `attending` (Yes/No), and `notes`. The Apps Script `doPost(e)` should read `e.parameter.name`, `e.parameter.attending`, `e.parameter.notes`. Because of no-cors, the success state is shown optimistically — the response cannot be read from the browser.
