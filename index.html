@@ -511,7 +511,7 @@
 
           <div class="rsvp-field">
             <label class="rsvp-label" for="rsvpName">Name</label>
-            <input class="rsvp-input" type="text" id="rsvpName" name="name"
+            <input class="rsvp-input" type="text" id="rsvpName" name="Name"
               placeholder="Your full name" required autocomplete="name">
           </div>
 
@@ -519,11 +519,11 @@
             <label class="rsvp-label">Attending?</label>
             <div class="rsvp-toggle" role="group" aria-label="Will you attend?">
               <label class="rsvp-toggle-opt">
-                <input type="radio" name="attending" value="Yes" required>
+                <input type="radio" name="Attending" value="Yes" required>
                 <span>Joyfully accepts</span>
               </label>
               <label class="rsvp-toggle-opt">
-                <input type="radio" name="attending" value="No">
+                <input type="radio" name="Attending" value="No">
                 <span>Regretfully declines</span>
               </label>
             </div>
@@ -533,12 +533,16 @@
             <label class="rsvp-label" for="rsvpNotes">
               Notes <span class="rsvp-optional">(optional)</span>
             </label>
-            <textarea class="rsvp-input rsvp-textarea" id="rsvpNotes" name="notes"
+            <textarea class="rsvp-input rsvp-textarea" id="rsvpNotes" name="Notes"
               placeholder="Dietary restrictions, song requests, or anything else…" rows="4"></textarea>
           </div>
 
           <div class="rsvp-field-error" id="rsvpError" hidden>
             Please fill in your name and let us know if you'll attend.
+          </div>
+
+          <div class="rsvp-field-error" id="rsvpSubmitError" hidden>
+            Something went wrong — please try again or email us directly.
           </div>
 
           <button type="submit" class="rsvp-submit">Send RSVP</button>

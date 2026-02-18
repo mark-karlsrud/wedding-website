@@ -145,43 +145,47 @@
 (function initRsvp() {
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5iJ3Wr-NsH4D5z9cAcg27AMX-H3_Fbg-OgIV93fEbHw5CaKv9W-6ZET_9FaEiWP8LeA/exe';
 
-  const form    = document.getElementById('rsvpForm');
-  const success = document.getElementById('rsvpSuccess');
-  const errMsg  = document.getElementById('rsvpError');
+  const form      = document.getElementById('rsvpForm');
+  const success   = document.getElementById('rsvpSuccess');
+  const errMsg    = document.getElementById('rsvpError');
+  const submitErr = document.getElementById('rsvpSubmitError');
 
   if (!form) return;
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    const name      = form.elements.name.value.trim();
-    const attending = form.elements.attending.value;
-    const notes     = form.elements.notes.value.trim();
+    const fd        = new FormData(form);
+    const name      = (fd.get('Name') || '').trim();
+    const attending = fd.get('Attending') || '';
 
     if (!name || !attending) {
       errMsg.hidden = false;
       return;
     }
-    errMsg.hidden = true;
+    errMsg.hidden    = true;
+    submitErr.hidden = true;
 
     const btn = form.querySelector('.rsvp-submit');
     btn.textContent = 'Sending…';
     btn.disabled    = true;
 
-    try {
-      await fetch(SCRIPT_URL, {
-        method:  'POST',
-        mode:    'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body:    new URLSearchParams({ name, attending, notes }),
-      });
-    } catch (err) {
-      console.warn('RSVP submit error:', err);
-    }
-
-    // no-cors means we can't read the response — show success optimistically
-    form.hidden    = true;
-    success.hidden = false;
+    fetch('https://script.google.com/macros/s/AKfycbz5iJ3Wr-NsH4D5z9cAcg27AMX-H3_Fbg-OgIV93fEbHw5CaKv9W-6ZET_9FaEiWP8LeA/exec', {
+      method: 'POST',
+      body: fd
+    })
+    .then(function(res) { return res.json(); })
+    .then(function() {
+      form.hidden      = true;
+      success.hidden   = false;
+      btn.textContent  = 'Send RSVP';
+      btn.disabled     = false;
+    })
+    .catch(function() {
+      submitErr.hidden = false;
+      btn.textContent  = 'Send RSVP';
+      btn.disabled     = false;
+    });
   });
 })();
 
