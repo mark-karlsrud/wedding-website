@@ -447,7 +447,7 @@ async function main() {
     mesh.setColorAt(i, color);
   }
   mesh.instanceMatrix.needsUpdate = true;
-  mesh.instanceColor.needsUpdate = true;
+  if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
   scene.add(mesh);
 
   /* ── Building rooftop details ────────────────────────────── */
