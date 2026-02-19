@@ -190,6 +190,80 @@
 })();
 
 
+/* --- HERO PARALLAX --- */
+(function initParallax() {
+  const hero = document.getElementById('hero');
+  const layers = document.querySelectorAll('.parallax-layer');
+  if (!layers.length) return;
+
+  // Initial vertical offsets at scroll=0 (negative = lifted above baseline).
+  // Background layers start highest; foreground nearly at baseline.
+  // Order matches HTML: building4, building2, building1, building3, bridge, statue.
+  const spreadOffsets = [-230, -135, -90, -80, -25, -12];
+
+  let ticking = false;
+
+  function update() {
+    const scrollY = window.scrollY;
+    const heroHeight = hero.offsetHeight;
+    // progress 0 (top) → 1 (scrolled past hero)
+    const progress = Math.min(scrollY / heroHeight, 1);
+
+    layers.forEach((layer, i) => {
+      const base = spreadOffsets[i] ?? 0;
+      // Layers start spread; converge toward baseline as progress → 1
+      const translateY = base * (1 - progress);
+      layer.style.transform = `translateY(${translateY}px)`;
+    });
+    ticking = false;
+  }
+
+  update(); // set initial positions on load
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
+
+
+/* --- BUILDING1 TILE --- */
+(function initBuilding1Tile() {
+  const layer = document.querySelector('.parallax-layer:nth-child(3)');
+  if (!layer) return;
+  const src = layer.querySelector('img').src;
+
+  function tile() {
+    const probe = new Image();
+    probe.onload = function () {
+      // Displayed width respects max-width: 100vw
+      const tileW = Math.min(probe.naturalWidth, window.innerWidth);
+      const overlap = Math.round(tileW * 0.4);
+      layer.style.left  = -overlap + 'px';
+      layer.style.right = -overlap + 'px';
+      const totalWidth = window.innerWidth + overlap * 2;
+      // At least 2 tiles so one is always fully visible
+      const count = Math.max(Math.ceil(totalWidth / tileW) + 1, 2);
+      layer.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('img');
+        el.src = src;
+        el.alt = '';
+        if (i % 2 === 1) el.style.transform = 'scaleX(-1)';
+        layer.appendChild(el);
+      }
+    };
+    probe.src = src;
+  }
+
+  tile();
+  window.addEventListener('resize', tile, { passive: true });
+})();
+
+
 /* --- SCROLL REVEAL (subtle fade-in) --- */
 (function initReveal() {
   if (!('IntersectionObserver' in window)) return;
