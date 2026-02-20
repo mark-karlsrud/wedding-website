@@ -208,8 +208,8 @@ h1, h2, h3, h4 {
 }
 .parallax-layer:nth-child(1) { z-index: 1; justify-content: flex-start; padding-left: 0%; bottom: -50px; }  /* building4: far left */
 .parallax-layer:nth-child(1) img { max-width: 50vw; }
-.parallax-layer:nth-child(6) img { max-width: 25vw; }
-.parallax-layer:nth-child(5) img { max-width: 75vw; }
+.parallax-layer:nth-child(6) img { max-width: 50vw; }
+.parallax-layer:nth-child(5) img { max-width: 85vw; }
 .parallax-layer:nth-child(2) { z-index: 2; justify-content: flex-end; padding-right: 0%; bottom: 40px; }    /* building2: far right */
 .parallax-layer:nth-child(3) { z-index: 3; justify-content: flex-start; bottom: 20px; }                      /* building1: tiled from left */
 .parallax-layer:nth-child(3) img { max-width: 100vw; flex-shrink: 0; }
