@@ -114,14 +114,14 @@ h1, h2, h3, h4 {
    ============================================================ */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: var(--hero-vh, 100vh);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--cream);
   overflow: hidden;
-  padding: 6rem 2rem min(40vh, calc(100vh - 28rem));
+  padding: 6rem 2rem min(40vh, calc(var(--hero-vh, 100vh) - 28rem));
 }
 
 .hero-inner {
@@ -190,7 +190,7 @@ h1, h2, h3, h4 {
   top: 0;
   left: 0;
   right: 0;
-  height: 100vh;
+  height: var(--hero-vh, 100vh);
   overflow: hidden;
   pointer-events: none;
   z-index: 1;

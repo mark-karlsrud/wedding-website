@@ -4,6 +4,12 @@
 
 'use strict';
 
+/* --- LOCK HERO HEIGHT to initial viewport (prevents resize/scroll-bar shifts) --- */
+(function lockHeroHeight() {
+  const vh = window.innerHeight;
+  document.documentElement.style.setProperty('--hero-vh', vh + 'px');
+})();
+
 /* --- NAV: scroll styling + mobile toggle --- */
 (function initNav() {
   const nav    = document.getElementById('nav');
