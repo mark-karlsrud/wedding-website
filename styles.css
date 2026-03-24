@@ -118,10 +118,10 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background: var(--cream);
   overflow: hidden;
-  padding: 6rem 2rem min(40vh, calc(var(--hero-vh, 100vh) - 28rem));
+  padding: 8vh 2rem min(40vh, calc(var(--hero-vh, 100vh) - 28rem));
 }
 
 .hero-inner {
@@ -673,11 +673,17 @@ h1, h2, h3, h4 {
   border: 1px solid var(--cream-mid);
 }
 
+.honeymoon-doodles {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
 .honeymoon-doodle {
-  width: 100px;
+  width: 56px;
   color: var(--charcoal);
   opacity: 0.12;
-  margin-bottom: 1.5rem;
 }
 
 .honeymoon-text {
@@ -912,6 +918,19 @@ h1, h2, h3, h4 {
   line-height: 1.8;
 }
 
+.rings-divider {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 2rem 0;
+  background: var(--cream);
+}
+
+.rings-divider img {
+  max-width: 160px;
+  width: 100%;
+  height: auto;
+}
+
 /* ============================================================
    FOOTER
    ============================================================ */
@@ -973,6 +992,7 @@ h1, h2, h3, h4 {
 /* Tablet */
 @media (min-aspect-ratio: 7/5) {
   .hero {
+    padding-top: 5vh;
     padding-bottom: 50vh;
   }
   .parallax-layer img {
