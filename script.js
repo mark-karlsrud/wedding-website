@@ -149,7 +149,7 @@
 
 /* --- RSVP: submit to Google Apps Script --- */
 (function initRsvp() {
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5iJ3Wr-NsH4D5z9cAcg27AMX-H3_Fbg-OgIV93fEbHw5CaKv9W-6ZET_9FaEiWP8LeA/exe';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwJzMl2PK3SwYZ7zBJPNcpm4Cem8Ikl-hq9gF03SrKdD6qZk5HYXPQ8ILm50Cy-_bj3A/exec';
 
   const form      = document.getElementById('rsvpForm');
   const success   = document.getElementById('rsvpSuccess');
@@ -176,7 +176,7 @@
     btn.textContent = 'Sending…';
     btn.disabled    = true;
 
-    fetch('https://script.google.com/macros/s/AKfycbz5iJ3Wr-NsH4D5z9cAcg27AMX-H3_Fbg-OgIV93fEbHw5CaKv9W-6ZET_9FaEiWP8LeA/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbzwJzMl2PK3SwYZ7zBJPNcpm4Cem8Ikl-hq9gF03SrKdD6qZk5HYXPQ8ILm50Cy-_bj3A/exec', {
       method: 'POST',
       body: fd
     })
