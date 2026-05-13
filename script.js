@@ -177,7 +177,18 @@
 
   slides.forEach((slide, i) => {
     const img = slide.querySelector('img');
-    if (img) img.addEventListener('click', () => lbOpen(i));
+    if (!img) return;
+    let tapX = 0, tapY = 0;
+    img.addEventListener('touchstart', e => {
+      tapX = e.touches[0].clientX;
+      tapY = e.touches[0].clientY;
+    }, { passive: true });
+    img.addEventListener('touchend', e => {
+      const dx = Math.abs(e.changedTouches[0].clientX - tapX);
+      const dy = Math.abs(e.changedTouches[0].clientY - tapY);
+      if (dx < 10 && dy < 10) lbOpen(i);
+    });
+    img.addEventListener('click', () => lbOpen(i));
   });
 
   lb.querySelector('.lb-close').addEventListener('click', lbClose);

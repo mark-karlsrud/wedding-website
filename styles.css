@@ -606,7 +606,7 @@ h1, h2, h3, h4 {
 .lb-prev { left: 0; }
 .lb-next { right: 0; }
 
-.carousel-slide img { cursor: zoom-in; }
+.carousel-slide img { cursor: pointer; }
 
 /* ============================================================
    HOTELS
