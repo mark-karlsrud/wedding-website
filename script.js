@@ -185,6 +185,8 @@
   function lbGo(i) {
     lbIdx = (i + files.length) % files.length;
     lbImg.src = `pics/${encodeURIComponent(files[lbIdx])}`;
+    loadSlide(lbIdx + 1);
+    loadSlide(lbIdx - 1);
   }
 
   slides.forEach((slide, i) => {
