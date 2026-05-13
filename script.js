@@ -82,6 +82,10 @@
       slide.appendChild(img);
     }
 
+    const spinner = document.createElement('div');
+    spinner.className = 'slide-spinner';
+    slide.appendChild(spinner);
+
     track.appendChild(slide);
   });
 
@@ -109,6 +113,11 @@
     if (el && el.dataset.src) {
       el.src = el.dataset.src;
       delete el.dataset.src;
+      if (el.tagName === 'IMG' && !el.complete) {
+        slide.classList.add('is-loading');
+        el.addEventListener('load',  () => slide.classList.remove('is-loading'), { once: true });
+        el.addEventListener('error', () => slide.classList.remove('is-loading'), { once: true });
+      }
     }
   }
 

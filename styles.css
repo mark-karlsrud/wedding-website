@@ -488,6 +488,26 @@ h1, h2, h3, h4 {
 .carousel-slide {
   flex: 0 0 100%;
   width: 100%;
+  position: relative;
+}
+
+.slide-spinner {
+  display: none;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(191, 158, 108, 0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  pointer-events: none;
+}
+.carousel-slide.is-loading .slide-spinner { display: block; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Placeholder slides */
