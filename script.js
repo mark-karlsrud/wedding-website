@@ -173,19 +173,33 @@
     <button class="lb-close" aria-label="Close">&times;</button>
     <button class="lb-prev" aria-label="Previous">&#8249;</button>
     <img class="lb-img" src="" alt="Sophia and Mark">
+    <div class="lb-spinner"></div>
     <button class="lb-next" aria-label="Next">&#8250;</button>
   `;
   document.body.appendChild(lb);
 
-  const lbImg  = lb.querySelector('.lb-img');
-  let lbIdx    = 0;
-  let lbStartX = null;
+  const lbImg     = lb.querySelector('.lb-img');
+  const lbSpinner = lb.querySelector('.lb-spinner');
+  let lbIdx       = 0;
+  let lbStartX    = null;
+
+  function lbSetSrc(src) {
+    if (lbImg.src === src) return;
+    lb.classList.add('lb-loading');
+    const tmp = new Image();
+    tmp.onload = tmp.onerror = () => {
+      lbImg.src = src;
+      lb.classList.remove('lb-loading');
+    };
+    tmp.src = src;
+  }
 
   function lbOpen(i) {
     lbIdx = i;
-    lbImg.src = `pics/${encodeURIComponent(files[lbIdx])}`;
+    const src = `pics/${encodeURIComponent(files[lbIdx])}`;
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
+    lbSetSrc(src);
   }
   function lbClose() {
     lb.classList.remove('open');
@@ -193,7 +207,7 @@
   }
   function lbGo(i) {
     lbIdx = (i + files.length) % files.length;
-    lbImg.src = `pics/${encodeURIComponent(files[lbIdx])}`;
+    lbSetSrc(`pics/${encodeURIComponent(files[lbIdx])}`);
     loadSlide(lbIdx + 1);
     loadSlide(lbIdx - 1);
   }
