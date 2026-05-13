@@ -69,17 +69,16 @@
 
     if (VIDEO_EXTS.has(ext)) {
       const v = document.createElement('video');
-      v.src = src;
+      v.dataset.src = src;
       v.muted = true;
       v.loop  = true;
       v.playsInline = true;
-      v.preload = 'metadata';
+      v.preload = 'none';
       slide.appendChild(v);
     } else {
       const img = document.createElement('img');
-      img.src = src;
+      img.dataset.src = src;
       img.alt = 'Sophia and Mark';
-      img.loading = i === 0 ? 'eager' : 'lazy';
       slide.appendChild(img);
     }
 
@@ -104,12 +103,25 @@
   let current  = 0;
   let startX   = null;
 
+  function loadSlide(i) {
+    const slide = slides[(i + total) % total];
+    const el = slide.querySelector('img, video');
+    if (el && el.dataset.src) {
+      el.src = el.dataset.src;
+      delete el.dataset.src;
+    }
+  }
+
   function goTo(index) {
-    const prev = current;
     current = (index + total) % total;
 
     track.style.transform = `translateX(-${current * 100}%)`;
     dots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+    // Load current + neighbours
+    loadSlide(current);
+    loadSlide(current + 1);
+    loadSlide(current - 1);
 
     // Play active video, pause others
     slides.forEach((slide, i) => {
