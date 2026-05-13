@@ -4,25 +4,6 @@
 
 'use strict';
 
-/* --- PREVIEW MODE: hide non-essential sections unless ?full param is present --- */
-(function initPreviewMode() {
-  if (!new URLSearchParams(window.location.search).has('full')) {
-    ['schedule', 'rsvp', 'gallery', 'registry'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
-    document.querySelectorAll('.nav-links a[href]').forEach(a => {
-      const target = a.getAttribute('href').replace('#', '');
-      if (['schedule', 'rsvp', 'gallery', 'registry'].includes(target)) {
-        a.style.display = 'none';
-      }
-    });
-  } else {
-    const cs = document.getElementById('coming-soon');
-    if (cs) cs.style.display = 'none';
-  }
-})();
-
 /* --- LOCK HERO HEIGHT to initial viewport (prevents resize/scroll-bar shifts) --- */
 (function lockHeroHeight() {
   const vh = window.innerHeight;
