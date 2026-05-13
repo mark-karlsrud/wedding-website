@@ -151,12 +151,20 @@
 (function initRsvp() {
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzwJzMl2PK3SwYZ7zBJPNcpm4Cem8Ikl-hq9gF03SrKdD6qZk5HYXPQ8ILm50Cy-_bj3A/exec';
 
-  const form      = document.getElementById('rsvpForm');
-  const success   = document.getElementById('rsvpSuccess');
-  const errMsg    = document.getElementById('rsvpError');
-  const submitErr = document.getElementById('rsvpSubmitError');
+  const form        = document.getElementById('rsvpForm');
+  const success     = document.getElementById('rsvpSuccess');
+  const successText = success && success.querySelector('.rsvp-success-text');
+  const drinksField = document.getElementById('rsvpDrinksField');
+  const errMsg      = document.getElementById('rsvpError');
+  const submitErr   = document.getElementById('rsvpSubmitError');
 
   if (!form) return;
+
+  form.querySelectorAll('input[name="Attending"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      if (drinksField) drinksField.style.display = radio.value === 'No' ? 'none' : '';
+    });
+  });
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -182,10 +190,16 @@
     })
     .then(function(res) { return res.json(); })
     .then(function() {
+      if (successText) {
+        successText.textContent = attending === 'No'
+          ? 'Thank you for letting us know.'
+          : "Thank you — we can't wait to celebrate with you.";
+      }
       form.hidden      = true;
       success.hidden   = false;
       btn.textContent  = 'Send RSVP';
       btn.disabled     = false;
+      if (attending !== 'No') launchConfetti();
     })
     .catch(function() {
       submitErr.hidden = false;
@@ -195,6 +209,53 @@
   });
 })();
 
+
+/* --- CONFETTI --- */
+function launchConfetti() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const COLORS = ['#BF9E6C', '#D4BC96', '#F7F4EE', '#EDE8DF', '#2A2820', '#ffffff'];
+  const particles = Array.from({ length: 130 }, () => ({
+    x:       canvas.width  * (0.3 + Math.random() * 0.4),
+    y:       canvas.height * 0.5,
+    vx:      (Math.random() - 0.5) * 20,
+    vy:      -(Math.random() * 14 + 4),
+    color:   COLORS[Math.floor(Math.random() * COLORS.length)],
+    w:       Math.random() * 9 + 4,
+    h:       Math.random() * 5 + 3,
+    angle:   Math.random() * Math.PI * 2,
+    spin:    (Math.random() - 0.5) * 0.25,
+    gravity: 0.4 + Math.random() * 0.2,
+  }));
+
+  let raf;
+  (function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+    particles.forEach(p => {
+      p.vy  += p.gravity;
+      p.vx  *= 0.98;
+      p.x   += p.vx;
+      p.y   += p.vy;
+      p.angle += p.spin;
+      if (p.y < canvas.height + 20) alive = true;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+    if (alive) { raf = requestAnimationFrame(draw); }
+    else        { canvas.remove(); }
+  })();
+}
 
 /* --- HERO PARALLAX --- */
 (function initParallax() {
