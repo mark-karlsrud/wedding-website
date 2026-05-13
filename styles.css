@@ -643,7 +643,8 @@ h1, h2, h3, h4 {
 .carousel-slide.is-loading .slide-spinner { display: block; }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 /* ============================================================
