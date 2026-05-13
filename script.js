@@ -144,6 +144,61 @@
   }
 
   goTo(0);
+
+  // ── 5. Lightbox ───────────────────────────────────────────────
+  const lb = document.createElement('div');
+  lb.id = 'carouselLightbox';
+  lb.innerHTML = `
+    <button class="lb-close" aria-label="Close">&times;</button>
+    <button class="lb-prev" aria-label="Previous">&#8249;</button>
+    <img class="lb-img" src="" alt="Sophia and Mark">
+    <button class="lb-next" aria-label="Next">&#8250;</button>
+  `;
+  document.body.appendChild(lb);
+
+  const lbImg  = lb.querySelector('.lb-img');
+  let lbIdx    = 0;
+  let lbStartX = null;
+
+  function lbOpen(i) {
+    lbIdx = i;
+    lbImg.src = `pics/${encodeURIComponent(files[lbIdx])}`;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function lbClose() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function lbGo(i) {
+    lbIdx = (i + files.length) % files.length;
+    lbImg.src = `pics/${encodeURIComponent(files[lbIdx])}`;
+  }
+
+  slides.forEach((slide, i) => {
+    const img = slide.querySelector('img');
+    if (img) img.addEventListener('click', () => lbOpen(i));
+  });
+
+  lb.querySelector('.lb-close').addEventListener('click', lbClose);
+  lb.querySelector('.lb-prev').addEventListener('click', () => lbGo(lbIdx - 1));
+  lb.querySelector('.lb-next').addEventListener('click', () => lbGo(lbIdx + 1));
+  lb.addEventListener('click', e => { if (e.target === lb) lbClose(); });
+
+  lb.addEventListener('touchstart', e => { lbStartX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (lbStartX === null) return;
+    const diff = lbStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) lbGo(diff > 0 ? lbIdx + 1 : lbIdx - 1);
+    lbStartX = null;
+  }, { passive: true });
+
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape')      lbClose();
+    if (e.key === 'ArrowLeft')   lbGo(lbIdx - 1);
+    if (e.key === 'ArrowRight')  lbGo(lbIdx + 1);
+  });
 })();
 
 
@@ -199,6 +254,7 @@
       success.hidden   = false;
       btn.textContent  = 'Send RSVP';
       btn.disabled     = false;
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
       if (attending !== 'No') launchConfetti();
     })
     .catch(function() {
