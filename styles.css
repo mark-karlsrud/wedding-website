@@ -305,6 +305,7 @@ h1, h2, h3, h4 {
   gap: 2rem;
   align-items: start;
 }
+.weekend-grid > .day-col { align-self: start; }
 
 .day-heading {
   text-align: center;
@@ -419,12 +420,17 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: stretch;
   gap: 1rem;
-  padding-top: 6rem;
   color: var(--charcoal);
   opacity: 0.2;
 }
 .day-divider svg { width: 48px; }
+.day-divider-img {
+  width: 72px;
+  height: auto;
+  object-fit: contain;
+}
 .divider-line {
   width: 1px;
   flex: 1;
@@ -547,6 +553,17 @@ h1, h2, h3, h4 {
 /* ============================================================
    HOTELS
    ============================================================ */
+.hotels-img-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+.hotels-img {
+  max-width: 160px;
+  width: 100%;
+  height: auto;
+}
+
 .hotels-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -667,6 +684,17 @@ h1, h2, h3, h4 {
 /* ============================================================
    RSVP
    ============================================================ */
+.rsvp-img-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+.rsvp-martinis {
+  max-width: 160px;
+  width: 100%;
+  height: auto;
+}
+
 .rsvp-wrap {
   max-width: 520px;
   margin: 0 auto;
@@ -839,8 +867,7 @@ h1, h2, h3, h4 {
 .rings-divider {
   display: flex;
   justify-content: center;
-  padding: 3rem 2rem 0;
-  background: var(--cream);
+  margin-bottom: 2.5rem;
 }
 
 .rings-divider img {
