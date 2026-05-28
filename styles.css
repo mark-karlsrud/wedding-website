@@ -778,6 +778,13 @@ h1, h2, h3, h4 {
   font-size: 0.8rem;
 }
 
+.registry-coming-soon {
+  font-family: var(--font-hand);
+  font-size: 1.4rem;
+  color: var(--gold);
+  text-align: center;
+}
+
 /* ============================================================
    RSVP
    ============================================================ */
