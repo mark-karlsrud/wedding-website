@@ -400,6 +400,11 @@ h1, h2, h3, h4 {
   margin-top: 0.4rem;
 }
 
+.event-link {
+  color: var(--gold);
+  text-underline-offset: 2px;
+}
+
 .event-qr {
   display: block;
   width: 80px;
