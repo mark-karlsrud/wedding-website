@@ -402,8 +402,8 @@ h1, h2, h3, h4 {
 
 .event-qr {
   display: block;
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   margin-top: 0.75rem;
   border-radius: 4px;
 }
