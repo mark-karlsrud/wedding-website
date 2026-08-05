@@ -402,7 +402,9 @@ h1, h2, h3, h4 {
 
 .event-link {
   color: var(--gold);
+  text-decoration: underline;
   text-underline-offset: 2px;
+  font-weight: 600;
 }
 
 .event-qr {
